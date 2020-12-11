@@ -1,6 +1,9 @@
 package com.example.demo;
 
+import com.sun.xml.bind.v2.model.core.ID;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/lessons")
@@ -15,6 +18,16 @@ public class LessonsController {
     @GetMapping("")
     public Iterable<Lesson> all() {
         return this.repository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Lesson> findById(@PathVariable Long id) {
+        return this.repository.findById(5L);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        this.repository.deleteById(5L);
     }
 
     @PostMapping("")
