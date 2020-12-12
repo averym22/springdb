@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.sun.xml.bind.v2.model.core.ID;
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -21,13 +21,32 @@ public class LessonsController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Lesson> findById(@PathVariable Long id) {
-        return this.repository.findById(5L);
+    public Optional<Lesson> findByd(@PathVariable Long id) {
+        return this.repository.findById(id);
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
-        this.repository.deleteById(5L);
+        this.repository.deleteById(id);
+    }
+
+    @PatchMapping("/{id}")
+    public Lesson findByIdandUpdate(@PathVariable Long id, @RequestBody Lesson lessonDetails) throws ObjectNotFoundException {
+        // find record from database and store locally
+
+            Optional<Lesson> lesson = this.repository.findById(id);
+
+            if(lesson.isPresent()) {
+                Lesson lesson1 = lesson.get();
+                lesson1.setTitle(lessonDetails.getTitle());
+                lesson1.setDeliveredOn(lessonDetails.getDeliveredOn());
+                return this.repository.save(lesson1);
+
+            } else {
+                throw new ObjectNotFoundException("Could not find lesson id");
+            }
+
+
     }
 
     @PostMapping("")
